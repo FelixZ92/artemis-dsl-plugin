@@ -2,12 +2,21 @@ package de.fz.contrib.script
 
 import com.artemis.Aspect
 import com.artemis.AspectSubscriptionManager
-import com.artemis.BaseEntitySystem
 import com.artemis.Component
 import com.artemis.EntitySubscription
 import com.artemis.utils.IntBag
 
+
 /**
+ * Behaves similar to {@link com.artemis.BaseEntitySystem}
+ *
+ * Annotate a script with <code>@groovy.transform.BaseScript(BaseEntityScript)</code> to use this.
+ *
+ * Available functions in a script using this class:
+ * <code>inserted</code>
+ * <code>removed</code>
+ * <code>aspect</code>
+ * and all of {@link ArtemisScript}
  *
  * @author felixz
  */

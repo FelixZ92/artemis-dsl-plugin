@@ -3,6 +3,19 @@ package de.fz.contrib.script
 import com.artemis.*
 
 /**
+ * Base class of a script using the DSL.
+ * Behaves similar to {@link BaseSystem}
+ *
+ * Annotate a script with <code>@groovy.transform.BaseScript(ArtemisScript)</code> to use this.
+ *
+ * Available functions in a script using this class:
+ * <code>wire</code>
+ * <code>init</code>
+ * <code>begin</code>
+ * <code>process</code>
+ * <code>checkProcessing</code>
+ * <code>name</code>
+ * <code>setEnabled</code>
  *
  * @author felixz
  */
@@ -11,6 +24,7 @@ abstract class ArtemisScript extends Script {
     protected World world;
 
     protected boolean enabled = true
+    protected String name
 
     protected def initClosure
     protected def processClosure
@@ -36,6 +50,10 @@ abstract class ArtemisScript extends Script {
 
         inserted {}
         removed {}
+    }
+
+    protected void name(String name) {
+        this.name = name
     }
 
     protected void wire(@DelegatesTo(WireDelegate) Closure closure) {
@@ -99,7 +117,11 @@ abstract class ArtemisScript extends Script {
         this.enabled = enabled
     }
 
-    // closures used in de.fz.contrib.script extending subclasses of this base de.fz.contrib.script need to be declared here due to availability
+    String getName() {
+        return name
+    }
+
+// closures used in de.fz.contrib.script extending subclasses of this base de.fz.contrib.script need to be declared here due to availability
     void aspect(Closure closure) {}
 
     void inserted(Closure closure) {}
@@ -125,7 +147,6 @@ abstract class ArtemisScript extends Script {
         }
 
         void wire(Class<?> classToWire) {
-            println "wire $classToWire"
             def toWire
             def fieldName
             if (BaseSystem.isAssignableFrom(classToWire)) {
@@ -137,7 +158,7 @@ abstract class ArtemisScript extends Script {
             //def toWire = BaseSystem.isAssignableFrom(classToWire) ? world.getSystem(classToWire)
             //        : Component.isAssignableFrom(classToWire) ? world.getMapper(classToWire) : null
 
-            def name = classToWire.getSimpleName().toLowerCase()
+ //           def name = classToWire.getSimpleName().toLowerCase()
             fieldName = toLowerCamelCase(classToWire.getSimpleName())
             wireTo.metaClass."$fieldName" = toWire
             println fieldName

@@ -3,9 +3,18 @@ package de.fz.contrib.script
 import groovy.transform.InheritConstructors
 
 /**
+ * Behaves similar to {@link com.artemis.systems.IntervalSystem}
+ *
+ * Annotate a script with <code>@groovy.transform.BaseScript(IntervalScript)</code> to use this.
+ *
+ * Available functions in a script using this class:
+ * <code>interval</code>
+ * <code>timeDelta</code>
+ * and all of {@link BaseEntityScript}
  *
  * @author felixz
  */
+
 @InheritConstructors
 abstract class IntervalScript extends BaseEntityScript {
 

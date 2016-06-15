@@ -4,6 +4,16 @@ import com.artemis.World
 import com.artemis.utils.IntBag
 
 /**
+ * Behaves similar to {@link com.artemis.systems.DelayedIteratingSystem}
+ *
+ * Annotate a script with <code>@groovy.transform.BaseScript(DelayedIteratingScript)</code> to use this.
+ *
+ * Available functions in a script using this class:
+ * <code>remainingDelay</code>
+ * <code>timeDelta</code>
+ * <code>processDelta</code>
+ * <code>processExpired</code>
+ * and all of {@link BaseEntityScript}
  *
  * @author felixz
  */
