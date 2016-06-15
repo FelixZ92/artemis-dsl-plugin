@@ -1,0 +1,39 @@
+// apply stuff the script itself needs (pre-processor, etc...)
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        jcenter()
+    }
+    dependencies {
+        classpath "net.onedaybeard.artemis:artemis-odb-gradle-plugin:$artemisVersion"
+        // introduces support for provided scope.
+        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:1.12.+'
+    }
+}
+
+configure(allprojects) {
+    apply plugin: "java"
+    apply plugin: "idea"
+    apply plugin: "eclipse"
+    apply plugin: "provided-base"
+
+    compileJava.options.encoding = 'UTF-8';
+    sourceCompatibility = 1.7
+
+    group = GROUPID
+    version = VERSION
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+
+    dependencies {
+
+    }
+}

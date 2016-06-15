@@ -1,0 +1,4 @@
+rootProject.name = 'artemis-dsl-plugin'
+include "contrib-dsl"
+include "contrib-test"
+

@@ -1,0 +1,6 @@
+dependencies {
+    // Artemis-odb
+    compile "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    testCompile "junit:junit:$junitVersion"
+}
