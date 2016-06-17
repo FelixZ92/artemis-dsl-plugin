@@ -33,7 +33,7 @@ abstract class DelayedIteratingScript extends BaseEntityScript {
 
     @Override
     void setWorld(World world) {
-        super.setWorld(world)
+        Object.setWorld(world)
         timeDeltaClosure = { return this.world.getDelta() }
     }
 
@@ -69,7 +69,7 @@ abstract class DelayedIteratingScript extends BaseEntityScript {
             offerDelay(remainingDelay);
         }
 
-        super.inserted(entityId)
+        Object.inserted(entityId)
     }
 
     @Override

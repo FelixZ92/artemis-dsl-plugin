@@ -1,7 +1,5 @@
 package script
 
-@groovy.transform.BaseScript(IntervalIteratingScript)
-import de.fz.contrib.script.IntervalIteratingScript
 import de.fz.contrib.script.comp.Bar
 import de.fz.contrib.script.comp.Baz
 import de.fz.contrib.script.comp.Foo

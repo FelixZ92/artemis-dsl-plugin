@@ -19,7 +19,7 @@ import com.artemis.*
  *
  * @author felixz
  */
-abstract class ArtemisScript extends Script {
+public abstract class ArtemisScript extends Script implements ScriptAdapter{
 
     protected World world;
 
@@ -50,6 +50,8 @@ abstract class ArtemisScript extends Script {
 
         inserted {}
         removed {}
+
+//        this.run()
     }
 
     protected void name(String name) {
@@ -95,7 +97,10 @@ abstract class ArtemisScript extends Script {
 
     protected boolean checkProcessing() { checkProcessingClosure() }
 
-    protected void init() { initClosure() }
+    public void init() {
+        this.run()
+        initClosure()
+    }
 
     protected void init(Closure closure) {
         initClosure = closure

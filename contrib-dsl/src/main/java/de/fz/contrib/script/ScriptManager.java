@@ -19,8 +19,8 @@ public class ScriptManager extends BaseSystem {
 
     public static final String TAG = ScriptManager.class.getSimpleName();
 
-    private final Map<Class<? extends ArtemisScript>, ArtemisScript> scriptsByClass;
-    private final Map<String, ArtemisScript> scriptsByName;
+    private final Map<Class<? extends ScriptAdapter>, ScriptAdapter> scriptsByClass;
+    private final Map<String, ScriptAdapter> scriptsByName;
     private GroovyShell groovyShell;
 
     public ScriptManager() {
@@ -46,11 +46,14 @@ public class ScriptManager extends BaseSystem {
      * @return an instance of the parsed script
      */
     @SuppressWarnings("unchecked")
-    public <T extends ArtemisScript> T registerScript(File file) {
+    public <T extends ScriptAdapter> T registerScript(File file) {
         try {
+//            Script s = groovyShell.parse(file);
+//            System.out.println("s = " + s.getClass());
+//            System.out.println("s.getClass().getSuperclass() = " + s.getClass().getSuperclass());
             T script = (T) groovyShell.parse(file);
             script.setWorld(this.world);
-            script.run();
+//            script.run();
             script.init();
             this.scriptsByClass.put(script.getClass(), script);
             if (script.getName() != null) this.scriptsByName.put(script.getName(), script);
@@ -62,11 +65,11 @@ public class ScriptManager extends BaseSystem {
     }
 
     /**
-     * Register an instance of {@link ArtemisScript} directly
+     * Register an instance of {@link ScriptAdapter} directly
      *
      * @param script the script to register
      */
-    public <T extends ArtemisScript> void registerScript(T script) {
+    public <T extends ScriptAdapter> void registerScript(T script) {
         if (!this.scriptsByClass.containsKey(script.getClass())) {
             this.scriptsByClass.put(script.getClass(), script);
             if (script.getName() != null) this.scriptsByName.put(script.getName(), script);
@@ -74,31 +77,31 @@ public class ScriptManager extends BaseSystem {
     }
 
     /**
-     * Retrieve a registered {@link ArtemisScript} by its class
+     * Retrieve a registered {@link ScriptAdapter} by its class
      *
      * @param scriptClass the class of the script to look up
      * @return the registered script instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ArtemisScript> T getScript(Class<T> scriptClass) {
+    public <T extends ScriptAdapter> T getScript(Class<T> scriptClass) {
         return (T) this.scriptsByClass.get(scriptClass);
     }
 
     /**
-     * Retrieve a registered {@link ArtemisScript} by its name.
+     * Retrieve a registered {@link ScriptAdapter} by its name.
      * Only possible if <code>name {scriptname}</code> is called within a script
      *
      * @param name the scripts name
      * @return the registered script instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ArtemisScript> T getScript(String name) {
+    public <T extends ScriptAdapter> T getScript(String name) {
         return (T) this.scriptsByName.get(name);
     }
 
     @Override
     protected void processSystem() {
-        for (ArtemisScript script : this.scriptsByClass.values()) {
+        for (ScriptAdapter script : this.scriptsByClass.values()) {
             if (script.isEnabled()) script.process();
         }
     }
