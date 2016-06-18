@@ -48,12 +48,8 @@ public class ScriptManager extends BaseSystem {
     @SuppressWarnings("unchecked")
     public <T extends ScriptAdapter> T registerScript(File file) {
         try {
-//            Script s = groovyShell.parse(file);
-//            System.out.println("s = " + s.getClass());
-//            System.out.println("s.getClass().getSuperclass() = " + s.getClass().getSuperclass());
             T script = (T) groovyShell.parse(file);
             script.setWorld(this.world);
-//            script.run();
             script.init();
             this.scriptsByClass.put(script.getClass(), script);
             if (script.getName() != null) this.scriptsByName.put(script.getName(), script);

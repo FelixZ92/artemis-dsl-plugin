@@ -4,3 +4,34 @@ dependencies {
     compile "org.codehaus.groovy:groovy-all:$groovyVersion"
     testCompile "junit:junit:$junitVersion"
 }
+
+apply plugin: 'groovy'
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+// @fixme javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from {
+        javadoc.destinationDir
+        groovydoc.destinationDir
+    }
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
