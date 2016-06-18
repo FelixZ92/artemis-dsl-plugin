@@ -20,6 +20,7 @@ configure(allprojects) {
     apply plugin: "eclipse"
     apply plugin: "provided-base"
     apply plugin: "maven"
+    apply plugin: 'checkstyle'
 
     compileJava.options.encoding = 'UTF-8';
     sourceCompatibility = 1.7
@@ -36,5 +37,23 @@ configure(allprojects) {
 
     dependencies {
 
+    }
+
+    checkstyle {
+        toolVersion = '6.19'
+        sourceSets = [sourceSets.main]
+        configFile = rootProject.file("config/checkstyle/checkstyle.xml");
+        showViolations = true
+        ignoreFailures = true
+    }
+
+    checkstyleTest {
+        enabled = false
+    }
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        html.destination rootProject.file("build/reports/checkstyle.html")
     }
 }
