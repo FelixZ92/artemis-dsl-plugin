@@ -11,18 +11,36 @@ import java.util.Map;
 /**
  * Register and retrieve your scripts with this manager.
  * <p>
- * If you don't call <code>setEnabled false</code> in a script, its process method will be called here.
+ * If you don't call <code>setEnabled false</code> in a script, <br>
+ * its process method will be called here.
  *
  * @author felixz
  */
 public class ScriptManager extends BaseSystem {
 
+    /**
+     * This systems tag.
+     */
     public static final String TAG = ScriptManager.class.getSimpleName();
 
+    /**
+     * The registered scripts mapped by their classes.
+     */
     private final Map<Class<? extends ScriptAdapter>, ScriptAdapter> scriptsByClass;
+
+    /**
+     * The registered scripts mapped by their names.
+     */
     private final Map<String, ScriptAdapter> scriptsByName;
+
+    /**
+     * The GroovyShell to use.
+     */
     private GroovyShell groovyShell;
 
+    /**
+     * Constructs a new ScriptManager.
+     */
     public ScriptManager() {
         this(null);
     }
@@ -31,9 +49,9 @@ public class ScriptManager extends BaseSystem {
      * Constructs a new ScriptManager.
      * Can be registered with a {@link com.artemis.World} directly or via {@link GroovySupport}
      *
-     * @param shell
+     * @param shell the {@link GroovyShell} to use
      */
-    public ScriptManager(GroovyShell shell) {
+    public ScriptManager(final GroovyShell shell) {
         this.groovyShell = shell != null ? shell : new GroovyShell();
         this.scriptsByClass = new HashMap<>();
         this.scriptsByName = new HashMap<>();
@@ -43,43 +61,50 @@ public class ScriptManager extends BaseSystem {
      * Register a {@link ArtemisScript}.
      *
      * @param file the file containing a ArtemisScript
+     * @param <T>  the explicit script type
      * @return an instance of the parsed script
      */
     @SuppressWarnings("unchecked")
-    public <T extends ScriptAdapter> T registerScript(File file) {
+    public final <T extends ScriptAdapter> T registerScript(final File file) {
         try {
             T script = (T) groovyShell.parse(file);
             script.setWorld(this.world);
             script.init();
             this.scriptsByClass.put(script.getClass(), script);
-            if (script.getName() != null) this.scriptsByName.put(script.getName(), script);
+            if (script.getName() != null) {
+                this.scriptsByName.put(script.getName(), script);
+            }
             return script;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
         }
         return null;
     }
 
     /**
-     * Register an instance of {@link ScriptAdapter} directly
+     * Register an instance of {@link ScriptAdapter} directly.
      *
      * @param script the script to register
+     * @param <T>    the explicit script type
      */
-    public <T extends ScriptAdapter> void registerScript(T script) {
+    public final <T extends ScriptAdapter> void registerScript(final T script) {
         if (!this.scriptsByClass.containsKey(script.getClass())) {
             this.scriptsByClass.put(script.getClass(), script);
-            if (script.getName() != null) this.scriptsByName.put(script.getName(), script);
+            if (script.getName() != null) {
+                this.scriptsByName.put(script.getName(), script);
+            }
         }
     }
 
     /**
-     * Retrieve a registered {@link ScriptAdapter} by its class
+     * Retrieve a registered {@link ScriptAdapter} by its class.
      *
      * @param scriptClass the class of the script to look up
+     * @param <T>         the explicit script type
      * @return the registered script instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ScriptAdapter> T getScript(Class<T> scriptClass) {
+    public final <T extends ScriptAdapter> T getScript(final Class<T> scriptClass) {
         return (T) this.scriptsByClass.get(scriptClass);
     }
 
@@ -88,17 +113,20 @@ public class ScriptManager extends BaseSystem {
      * Only possible if <code>name {scriptname}</code> is called within a script
      *
      * @param name the scripts name
+     * @param <T>  the explicit script type
      * @return the registered script instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ScriptAdapter> T getScript(String name) {
+    public final <T extends ScriptAdapter> T getScript(final String name) {
         return (T) this.scriptsByName.get(name);
     }
 
     @Override
-    protected void processSystem() {
+    protected final void processSystem() {
         for (ScriptAdapter script : this.scriptsByClass.values()) {
-            if (script.isEnabled()) script.process();
+            if (script.isEnabled()) {
+                script.process();
+            }
         }
     }
 }

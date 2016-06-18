@@ -1,4 +1,6 @@
 /**
- * Created by felixz on 18.06.16.
+ * The java-side of the artemis-dsl-plugin.
+ *
+ * @author felixz
  */
 package de.fz.contrib.script;
