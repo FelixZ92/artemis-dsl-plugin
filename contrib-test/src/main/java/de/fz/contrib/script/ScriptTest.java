@@ -39,7 +39,7 @@ public class ScriptTest extends ApplicationAdapter {
         );
 
         ScriptManager scriptManager = world.getSystem(ScriptManager.class);
-        scriptManager.registerScript(new File("scripts/basesystem.groovy"));
+        scriptManager.registerScriptInternal("scripts/basesystem.groovy");
     }
 
     @Override

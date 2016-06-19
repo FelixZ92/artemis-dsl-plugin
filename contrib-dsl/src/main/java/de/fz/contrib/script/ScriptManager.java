@@ -1,6 +1,7 @@
 package de.fz.contrib.script;
 
 import com.artemis.BaseSystem;
+import de.fz.contrib.script.utils.FileUtils;
 import groovy.lang.GroovyShell;
 
 import java.io.File;
@@ -59,6 +60,8 @@ public class ScriptManager extends BaseSystem {
 
     /**
      * Register a {@link ArtemisScript}.
+     * Does not work for scripts within the classpath,
+     * Use {@link ScriptManager#registerScriptInternal(String)} instead.
      *
      * @param file the file containing a ArtemisScript
      * @param <T>  the explicit script type
@@ -68,17 +71,26 @@ public class ScriptManager extends BaseSystem {
     public final <T extends ScriptAdapter> T registerScript(final File file) {
         try {
             T script = (T) groovyShell.parse(file);
-            script.setWorld(this.world);
-            script.init();
-            this.scriptsByClass.put(script.getClass(), script);
-            if (script.getName() != null) {
-                this.scriptsByName.put(script.getName(), script);
-            }
+            this.registerScript(script);
             return script;
         } catch (IOException ioEx) {
             ioEx.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Register a script file on the classpath.
+     *
+     * @param fileName the script's file name
+     * @param <T>      the explicit script type
+     * @return an instance of the parsed script
+     */
+    @SuppressWarnings("unchecked")
+    public final <T extends ScriptAdapter> T registerScriptInternal(final String fileName) {
+        T script = (T) this.groovyShell.parse(FileUtils.readInternalAsString(fileName), fileName);
+        this.registerScript(script);
+        return script;
     }
 
     /**
@@ -89,6 +101,8 @@ public class ScriptManager extends BaseSystem {
      */
     public final <T extends ScriptAdapter> void registerScript(final T script) {
         if (!this.scriptsByClass.containsKey(script.getClass())) {
+            script.setWorld(this.world);
+            script.init();
             this.scriptsByClass.put(script.getClass(), script);
             if (script.getName() != null) {
                 this.scriptsByName.put(script.getName(), script);
