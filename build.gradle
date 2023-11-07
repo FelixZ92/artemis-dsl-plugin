@@ -10,7 +10,7 @@ buildscript {
     dependencies {
         classpath "net.onedaybeard.artemis:artemis-odb-gradle-plugin:$artemisVersion"
         // introduces support for provided scope.
-        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:1.12.+'
+        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:10.0.+'
     }
 }
 
