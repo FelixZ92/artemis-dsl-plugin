@@ -40,7 +40,7 @@ configure(allprojects) {
     }
 
     checkstyle {
-        toolVersion = '6.19'
+        toolVersion = '10.14.2'
         sourceSets = [sourceSets.main]
         configFile = rootProject.file("config/checkstyle/checkstyle.xml");
         showViolations = true
